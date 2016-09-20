@@ -1,0 +1,190 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Virtual Pet
+  description: Virtual Pet Game
+  contact:
+    name: pawel@mikesz.com
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /v1
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+  /user/login:
+    post:
+      description: Logs in the user
+      operationId: controllers.users.login
+      parameters:
+        - name: user
+          in: body
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        200:
+          description: User authorized
+          schema:
+            $ref: "#/definitions/Token"
+        404:
+          description: User not found
+        401:
+          description: User Unauthorized
+  /user/register:
+    post:
+      description: Registers the user
+      operationId: controllers.users.register
+      parameters:
+        - name: user
+          in: body
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        200:
+          description: User registered
+        409:
+          description: User with given login exists
+  /animals:
+    get:
+      description: A list of animals belonging to the user.
+      operationId: controllers.animals.list
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: A list of animals belonging to the user
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Animal"
+  /animal/kinds:
+    get:
+      description: Gets available kinds of animals
+      operationId: controllers.animals.kinds
+      responses:
+        200:
+          description: A list of animal kinds
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/AnimalKind"
+  /animal:
+    post:
+      description: Creates new animal of given kind
+      operationId: controllers.animals.animal
+      security:
+        - Bearer: []
+      parameters:
+        - name: kind
+          in: body
+          description: Kind of animal
+          required: true
+          schema:
+            $ref: "#/definitions/AnimalKind"
+      responses:
+        200:
+          description: Animal created
+          schema:
+            $ref: "#/definitions/Animal"
+        403:
+          description: Unauthorized access
+        404:
+          description: Kind of animal not found
+  /animal/{id}/pet:
+    get:
+      description: Pets the animal
+      operationId: controllers.animals.pet
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          description: ID of animal to use
+      responses:
+        200:
+          description: Animal was petted
+          schema:
+            $ref: "#/definitions/Animal"
+        403:
+          description: Unauthorized access
+        404:
+          description: Animal not found
+  /animal/{id}/feed:
+    get:
+      description: Feeds the animal
+      operationId: controllers.animals.feed
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          description: ID of animal to use
+      responses:
+        200:
+          description: Animal was fed
+          schema:
+            $ref: "#/definitions/Animal"
+        403:
+          description: Unauthorized access
+        404:
+          description: Animal not found
+  /animal/{id}/info:
+    get:
+      description: Gets info about animal
+      operationId: controllers.animals.info
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          type: integer
+          description: ID of animal to use
+      responses:
+        200:
+          description: Returns information about the animal
+          schema:
+            $ref: "#/definitions/Animal"
+        403:
+          description: Unauthorized access
+        404:
+          description: Animal not found
+definitions:
+  Animal:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      kind:
+        type: string
+      health:
+        type: integer
+        format: int64
+      hunger:
+        type: integer
+        format: int64
+  AnimalKind:
+    type: object
+    properties:
+      kind:
+        type: string
+  User:
+    type: object
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+  Token:
+    type: object
+    properties:
+      token:
+        type: string

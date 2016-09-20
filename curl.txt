@@ -1,0 +1,51 @@
+curl -H "Content-Type: application/json" \
+  -X POST -d '{"login":"pawel","password":"test"}' \
+  http://127.0.0.1:5000/v1/user/register
+
+curl -H "Content-Type: application/json" \
+  -X POST -d '{"login":"pawel","password":"test"}' \
+  http://127.0.0.1:5000/v1/user/login
+
+
+{
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InBhd2VsIn0.08M7LMiCYhwRVYlCSQUszny5qVLJJSRovnW3XedSm8A"
+}
+
+curl \
+  -H "Authentication: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InBhd2VsIn0.08M7LMiCYhwRVYlCSQUszny5qVLJJSRovnW3XedSm8A" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:5000/v1/animals
+
+curl \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:5000/v1/animal/kinds
+
+curl \
+  -H "Authentication: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InBhd2VsIn0.08M7LMiCYhwRVYlCSQUszny5qVLJJSRovnW3XedSm8A" \
+  -H "Content-Type: application/json" \
+  -X POST -d '{"kind":"cat"}' \
+  http://127.0.0.1:5000/v1/animal
+
+Returns:
+
+{
+  "happiness": 100000,
+  "hunger": 0,
+  "id": 1,
+  "kind": "cat"
+}
+
+curl \
+  -H "Authentication: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InBhd2VsIn0.08M7LMiCYhwRVYlCSQUszny5qVLJJSRovnW3XedSm8A" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:5000/v1/animal/1/pet
+
+curl \
+  -H "Authentication: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InBhd2VsIn0.08M7LMiCYhwRVYlCSQUszny5qVLJJSRovnW3XedSm8A" \
+  -H "Content-Type: application/json" \
+  http://127.0.0.1:5000/v1/animal/1/feed
+
+  curl \
+    -H "Authentication: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbiI6InBhd2VsIn0.08M7LMiCYhwRVYlCSQUszny5qVLJJSRovnW3XedSm8A" \
+    -H "Content-Type: application/json" \
+    http://127.0.0.1:5000/v1/animal/1/info
